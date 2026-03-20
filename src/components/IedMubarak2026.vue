@@ -34,8 +34,8 @@ const sendGreeting = (): void => {
       <div
         class="flex flex-col items-center w-full absolute bottom-0 z-30 text-center xl:px-16 px-10 pb-24"
       >
-        <img :src="moon" alt="" class="w-30 opacity-75" />
-        <img :src="our_picture" alt="" class="w-60 py-3 animate-zoom-pulse" />
+        <img :src="moon" alt="" class="w-30 opacity-75 pb-2" />
+        <img :src="our_picture" alt="" class="w-60 py-1 animate-zoom-pulse" />
         <h3 class="font-google-capriola text-xl pt-5">Selamat Hari Raya</h3>
         <h1
           class="font-bold font-google-capriola text-4xl py-2 animate-typing w-max"
