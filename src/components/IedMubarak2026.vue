@@ -6,10 +6,14 @@ import lamp from "../assets/images/lamp.png";
 import rice_cake from "../assets/images/rice_cake.png";
 import cloud from "../assets/images/cloud.png";
 import drum from "../assets/images/bedug.gif";
+import audio_ramadan from "../assets/audios/audio_ramadan.mp3";
 import { onMounted, ref } from "vue";
 import { isGlobalLoading } from "../store/loader";
+import { Icon } from "@iconify/vue";
 
 const iedFitr = ref<string>("Idul Fitri");
+const audioPlayer = ref<HTMLAudioElement | null>(null);
+const audioOn = ref<boolean>(false);
 // const isVisible = ref<boolean>(true);
 const progress = ref<number>(0);
 
@@ -28,12 +32,42 @@ const sendGreeting = (): void => {
   window.open(link, "_blank");
 };
 
+const playAudio = async () => {
+  if (audioPlayer.value) {
+    try {
+      await audioPlayer.value.play();
+      console.log("Audio playing successfully");
+    } catch (err) {
+      console.warn("Autoplay blocked. Waiting for user interaction.", err);
+
+      // Fallback: Listen for the first click on the document to start audio
+      const enableAudio = async () => {
+        await audioPlayer.value?.play();
+        document.removeEventListener("click", enableAudio);
+      };
+      document.addEventListener("click", enableAudio);
+    }
+  }
+};
+
+const stopAudio = () => {
+  if (audioPlayer.value) {
+    audioPlayer.value.pause();
+    audioPlayer.value.currentTime = 0;
+  }
+};
+
+const openGreeting = () => {
+  isGlobalLoading.value = false;
+  // playAudio();
+};
+
 onMounted(() => {
   const interval = setInterval(() => {
     progress.value++;
     if (progress.value === 100) {
       clearInterval(interval);
-      isGlobalLoading.value = false;
+      openGreeting();
     }
   }, 50);
 });
@@ -42,14 +76,27 @@ onMounted(() => {
 <template>
   <div class="bg-green-200 min-h-screen w-full flex justify-center p-0 xl:p-2">
     <div
-      :class="`items-center justify-center w-full min-h-screen flex-col gap-5 ${isGlobalLoading === false ? 'hidden' : 'flex'}`"
+      :class="`flex-col items-center justify-center ${isGlobalLoading === false ? 'hidden' : 'flex'}`"
     >
-      <div class="spinner"></div>
-      <p
-        class="font-medium font-google-capriola animate-pulse text-slate-800 px-12 text-center"
+      <div
+        v-if="progress < 100"
+        class="flex flex-col items-center justify-center gap-5"
       >
-        Memuat Ucapan Selamat Hari Raya... {{ progress }}%
-      </p>
+        <div class="spinner"></div>
+        <p
+          class="font-medium font-google-capriola animate-pulse text-slate-800 px-12 text-center"
+        >
+          Memuat Kartu Ucapan ... {{ progress }}%
+        </p>
+      </div>
+      <div v-else>
+        <button
+          @click="openGreeting"
+          class="bg-green-500 px-4 py-2 rounded font-google-capriola text-slate-50 hover:text-white animate-zoom-pulse shadow cursor-pointer"
+        >
+          Buka Ucapan Hari Raya
+        </button>
+      </div>
     </div>
     <div
       :class="`w-full xl:w-1/4 flex-col items-center justify-center animate-gradient-bg rounded-none xl:rounded-2xl shadow-lg p-0 relative  ${isGlobalLoading === false ? 'flex' : 'hidden'}`"
@@ -68,12 +115,11 @@ onMounted(() => {
         </h1>
         <h3 class="font-google-capriola text-xl pb-3">1 Syawal 1447 H.</h3>
         <p class="font-medium text-sm font-google-roboto-flex text-gray-700">
-          Ramadhan telah berlalu, Tiada kesucian tanpa permohonan maaf, tiada
-          kedamaian tanpa ketulusan. Selamat Hari Raya Idul Fitri. Mohon maaf
-          lahir dan batin.
+          Idul Fitri adalah momen berbagi kasih dan memaafkan. Semoga kita
+          selalu dalam lindungan-Nya.<br />Mohon maaf lahir dan batin.
         </p>
-        <div class="border border-slate-400 w-2/3 mt-4 inset-0 shadow"></div>
-        <p class="font-medium text-sm font-google-capriola py-4">
+        <div class="border border-slate-600 w-2/3 mt-3 inset-0 shadow"></div>
+        <p class="font-medium text-sm font-google-capriola py-5">
           Moch Diki Widianto & Rosi Mulyaningsih
         </p>
       </div>
@@ -111,25 +157,42 @@ onMounted(() => {
         <div class="w-1/2">
           <button
             @click.prevent="sendGreeting"
-            class="flex items-center justify-start px-4 bg-blue-400 font-google-capriola py-4 w-full rounded-tl-2xl xl:rounded-s-2xl text-slate-50 hover:text-white"
+            class="flex gap-1 items-center justify-start px-2 bg-lime-500 font-google-capriola text-sm py-4 w-full rounded-tl-xl xl:rounded-s-xl text-slate-50 hover:text-white"
           >
-            Kirim Ucapan
+            <Icon icon="mdi:greeting-card-open" class="text-xl" />
+            Kirim Pesan
           </button>
         </div>
         <div class="w-1/2">
           <button
             @click.prevent="sendMoney"
-            class="flex items-center justify-end px-4 bg-green-400 font-google-capriola py-4 w-full rounded-tr-2xl xl:rounded-e-2xl cursor-pointer text-slate-50 hover:text-white"
+            class="flex gap-1 items-center justify-end px-2 bg-emerald-500 font-google-capriola text-sm py-4 w-full rounded-tr-xl xl:rounded-e-xl cursor-pointer text-slate-50 hover:text-white"
           >
-            Bagi THR
+            Bagikan THR
+            <Icon icon="mdi:donate-outline" class="text-xl" />
           </button>
         </div>
       </div>
       <div
-        class="lg:absolute fixed bottom-0 center-0 rounded-full bg-gradient-to-r from-blue-400 to-green-400 h-24 w-24 flex items-center justify-center z-40"
+        @click="
+          () => {
+            audioOn = !audioOn;
+            audioOn ? playAudio() : stopAudio();
+          }
+        "
+        class="lg:absolute fixed bottom-0 center-0 rounded-full bg-gradient-to-r from-lime-500 to-emerald-500 h-26 w-26 flex flex-col items-center justify-center z-40"
       >
-        <img :src="drum" alt="" class="w-20" />
+        <img :src="drum" alt="" :class="`w-16 ${audioOn ? '' : 'grayscale'}`" />
+        <span
+          class="flex items-center justify-center text-xs font-google-roboto text-white gap-0.5 font-medium"
+        >
+          <Icon
+            :icon="`${audioOn ? 'ic:round-music-note' : 'ic:round-music-off'}`"
+          ></Icon
+          >Musik</span
+        >
       </div>
     </div>
   </div>
+  <audio ref="audioPlayer" :src="audio_ramadan" preload="auto" loop></audio>
 </template>
