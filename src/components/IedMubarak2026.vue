@@ -6,9 +6,12 @@ import lamp from "../assets/images/lamp.png";
 import rice_cake from "../assets/images/rice_cake.png";
 import cloud from "../assets/images/cloud.png";
 import drum from "../assets/images/bedug.gif";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
+import { isGlobalLoading } from "../store/loader";
 
 const iedFitr = ref<string>("Idul Fitri");
+// const isVisible = ref<boolean>(true);
+const progress = ref<number>(0);
 
 const sendMoney = (): void => {
   const link =
@@ -24,26 +27,46 @@ const sendGreeting = (): void => {
   const link = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodedMessage}`;
   window.open(link, "_blank");
 };
+
+onMounted(() => {
+  const interval = setInterval(() => {
+    progress.value++;
+    if (progress.value === 100) {
+      clearInterval(interval);
+      isGlobalLoading.value = false;
+    }
+  }, 50);
+});
 </script>
 
 <template>
   <div class="bg-green-200 min-h-screen w-full flex justify-center p-0 xl:p-2">
     <div
-      class="w-full xl:w-1/4 flex flex-col items-center justify-center animate-gradient-bg rounded-none xl:rounded-2xl shadow-lg p-0 relative"
+      :class="`items-center justify-center w-full min-h-screen flex-col gap-5 ${isGlobalLoading === false ? 'hidden' : 'flex'}`"
+    >
+      <div class="spinner"></div>
+      <p
+        class="font-medium font-google-capriola animate-pulse text-slate-800 px-12 text-center"
+      >
+        Memuat Ucapan Selamat Hari Raya... {{ progress }}%
+      </p>
+    </div>
+    <div
+      :class="`w-full xl:w-1/4 flex-col items-center justify-center animate-gradient-bg rounded-none xl:rounded-2xl shadow-lg p-0 relative  ${isGlobalLoading === false ? 'flex' : 'hidden'}`"
     >
       <div
-        class="flex flex-col items-center w-full absolute bottom-0 z-30 text-center xl:px-16 px-10 pb-24"
+        class="flex flex-col items-center justify-end w-full min-h-full absolute bottom-0 z-40 text-center xl:px-16 px-10 pb-24"
       >
         <img :src="moon" alt="" class="w-30 opacity-75 pb-2" />
         <img :src="our_picture" alt="" class="w-60 py-1 animate-zoom-pulse" />
-        <h3 class="font-google-capriola text-xl pt-5">Selamat Hari Raya</h3>
+        <h3 class="font-google-capriola text-xl pt-2">Selamat Hari Raya</h3>
         <h1
           class="font-bold font-google-capriola text-4xl py-2 animate-typing w-max"
           :style="{ '--chars-step': iedFitr.length }"
         >
           {{ iedFitr }}
         </h1>
-        <h3 class="font-google-capriola text-xl pb-5">1 Syawal 1447 H.</h3>
+        <h3 class="font-google-capriola text-xl pb-3">1 Syawal 1447 H.</h3>
         <p class="font-medium text-sm font-google-roboto-flex text-gray-700">
           Ramadhan telah berlalu, Tiada kesucian tanpa permohonan maaf, tiada
           kedamaian tanpa ketulusan. Selamat Hari Raya Idul Fitri. Mohon maaf
@@ -62,7 +85,7 @@ const sendGreeting = (): void => {
         />
       </div>
       <div
-        class="absolute z-20 -top-1 right-0 w-full flex items-start justify-between"
+        class="absolute z-30 -top-1 right-0 w-full flex items-start justify-between"
       >
         <div class="px-5 w-1/2">
           <img :src="lamp" alt="" class="w-20 opacity-80 animate-swing" />
@@ -72,7 +95,7 @@ const sendGreeting = (): void => {
         </div>
       </div>
       <div
-        class="absolute z-10 -top-30 left-0 w-full flex items-center justify-center"
+        class="absolute z-20 -top-30 left-0 w-full flex items-center justify-center"
       >
         <div class="flex items-center justify-center w-full">
           <img
@@ -83,7 +106,7 @@ const sendGreeting = (): void => {
         </div>
       </div>
       <div
-        class="absolute z-40 bottom-0 left-0 w-full flex items-end justify-center"
+        class="lg:absolute fixed z-40 bottom-0 left-0 w-full flex items-end justify-center"
       >
         <div class="w-1/2">
           <button
@@ -103,7 +126,7 @@ const sendGreeting = (): void => {
         </div>
       </div>
       <div
-        class="absolute bottom-0 center-0 rounded-full bg-gradient-to-r from-blue-400 to-green-400 h-24 w-24 flex items-center justify-center z-40"
+        class="lg:absolute fixed bottom-0 center-0 rounded-full bg-gradient-to-r from-blue-400 to-green-400 h-24 w-24 flex items-center justify-center z-40"
       >
         <img :src="drum" alt="" class="w-20" />
       </div>
