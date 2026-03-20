@@ -18,15 +18,18 @@ const audioOn = ref<boolean>(false);
 const progress = ref<number>(0);
 
 const sendMoney = (): void => {
+  // const link =
+  //   "https://link.dana.id/minta?full_url=https://qr.dana.id/v1/281012012019090581813815";
   const link =
-    "https://link.dana.id/minta?full_url=https://qr.dana.id/v1/281012012019090581813815";
+    "https://link.dana.id/minta?full_url=https://qr.dana.id/v1/281012012023050173249572";
   window.open(link, "_blank");
 };
 
 const sendGreeting = (): void => {
-  const phoneNumber = "6285311555456";
+  // const phoneNumber = "6285311555456";
+  const phoneNumber = "6285694659019";
   const message =
-    "Terima kasih, Selamat Hari Raya Idul Fitri 1447H, Mohon Maaf Lahir dan Batin 😊😊😊";
+    "Terima kasih, Selamat Hari Raya Idul Fitri 1447H, Minal Aidzin Wal Faizin, Mohon Maaf Lahir dan Batin 😊😊😊";
   const encodedMessage = encodeURIComponent(message);
   const link = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodedMessage}`;
   window.open(link, "_blank");
