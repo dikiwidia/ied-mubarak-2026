@@ -1,0 +1,130 @@
+@import url("https://fonts.googleapis.com/css2?family=Capriola&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+@import "tailwindcss";
+
+@theme {
+  --font-google-roboto: "Roboto", sans-serif;
+  --font-google-capriola: "Capriola", serif;
+  --font-google-montserrat: "Montserrat", sans-serif;
+}
+
+@layer components {
+  .animate-typing {
+    @apply overflow-hidden whitespace-nowrap;
+    /* Gunakan unit 'ch' agar lebar elemen sesuai jumlah huruf */
+    animation:
+      typing-ch 2s steps(var(--chars-step)) forwards,
+      blink 0.75s step-end infinite; /* Berhenti berkedip setelah 10 kali */
+  }
+
+  .animate-swing {
+    /* Tetapkan poros ayunan di tengah atas */
+    transform-origin: top center;
+
+    /* Panggil animasi swing */
+    animation: swing 3s ease-in-out infinite;
+  }
+
+  @keyframes typing-ch {
+    from {
+      width: 0;
+    }
+    /* Lebar akhir adalah jumlah karakter dikali 1ch */
+    to {
+      width: calc(var(--chars-step) * 1ch);
+    }
+  }
+
+  /* Keyframes untuk efek berayun */
+  @keyframes swing {
+    0% {
+      transform: rotate(0deg);
+    }
+    20% {
+      transform: rotate(10deg); /* Ayun ke kanan */
+    }
+    40% {
+      transform: rotate(-5deg); /* Ayun ke kiri */
+    }
+    60% {
+      transform: rotate(3deg); /* Ayun ke kanan (lebih kecil) */
+    }
+    80% {
+      transform: rotate(-3deg); /* Ayun ke kiri (lebih kecil) */
+    }
+    100% {
+      transform: rotate(0deg); /* Kembali ke tengah */
+    }
+  }
+
+  @keyframes gradient-move {
+    0% {
+      /* Kiri Atas */
+      background-position: 0% 0%;
+    }
+    25% {
+      /* Kanan Atas */
+      background-position: 100% 0%;
+    }
+    50% {
+      /* Kanan Bawah */
+      background-position: 100% 100%;
+    }
+    75% {
+      /* Kiri Bawah */
+      background-position: 0% 100%;
+    }
+    100% {
+      /* Kembali ke Kiri Atas */
+      background-position: 0% 0%;
+    }
+  }
+
+  /* 2. Buat Class Komponen untuk Menerapkan Gradasi Animasi */
+  .animate-gradient-bg {
+    /* Tentukan Empat Warna Gradasi (contoh: biru, ungu, merah, oranye) */
+    background-image: linear-gradient(
+      -45deg,
+      theme("colors.green.100"),
+      theme("colors.blue.100"),
+      theme("colors.pink.100"),
+      theme("colors.orange.100")
+    );
+
+    /* PENTING: Buat ukuran background jauh lebih besar (misal: 400% lebar) */
+    background-size: 800% 800%;
+
+    /* Terapkan Animasi */
+    animation-name: gradient-move;
+    animation-duration: 8s; /* Durasi lebih lambat agar terasa halus */
+    animation-timing-function: ease; /* Gunakan ease untuk percepatan/perlambatan alami */
+    animation-iteration-count: infinite; /* Ulang terus-menerus */
+  }
+
+  /* 1. Definisikan Keyframes (Urutan Perubahan Skala) */
+  @keyframes zoomInOut {
+    0% {
+      transform: scale(1); /* Ukuran asli */
+    }
+    50% {
+      transform: scale(1.06); /* Zoom in sedikit (110% dari ukuran asli) */
+    }
+    100% {
+      transform: scale(1); /* Kembali ke ukuran asli */
+    }
+  }
+
+  /* 2. Buat Class untuk Menerapkan Animasi */
+  .animate-zoom-pulse {
+    /* Panggil nama keyframes */
+    animation-name: zoomInOut;
+
+    /* Durasi satu siklus (misal: 3 detik untuk gerakan lambat dan halus) */
+    animation-duration: 5s;
+
+    /* Kecepatan animasi (ease-in-out agar transisi halus di awal dan akhir) */
+    animation-timing-function: ease-in-out;
+
+    /* Agar animasi berjalan terus menerus */
+    animation-iteration-count: infinite;
+  }
+}
