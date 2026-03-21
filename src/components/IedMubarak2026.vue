@@ -20,8 +20,10 @@ const progress = ref<number>(0);
 const sendMoney = (): void => {
   // const link =
   //   "https://link.dana.id/minta?full_url=https://qr.dana.id/v1/281012012019090581813815";
+  // const link =
+  //   "https://link.dana.id/minta?full_url=https://qr.dana.id/v1/281012012023050173249572";
   const link =
-    "https://link.dana.id/minta?full_url=https://qr.dana.id/v1/281012012023050173249572";
+    "https://link.dana.id/danakaget?c=sn5t92kku&r=ij4ugd&orderId=20260321101214755515010300166037270184250";
   window.open(link, "_blank");
 };
 
@@ -160,7 +162,7 @@ onMounted(() => {
         <div class="w-1/2">
           <button
             @click.prevent="sendGreeting"
-            class="flex gap-1 items-center justify-start px-2 bg-lime-500 font-google-capriola text-sm py-4 w-full rounded-tl-xl xl:rounded-s-xl text-slate-50 hover:text-white"
+            class="flex gap-1.5 items-center justify-start px-2 bg-lime-500 font-google-capriola text-sm py-4 w-full rounded-tl-xl xl:rounded-s-xl text-slate-50 hover:text-white"
           >
             <Icon icon="mdi:greeting-card-open" class="text-xl" />
             Kirim Pesan
@@ -169,10 +171,13 @@ onMounted(() => {
         <div class="w-1/2">
           <button
             @click.prevent="sendMoney"
-            class="flex gap-1 items-center justify-end px-2 bg-emerald-500 font-google-capriola text-sm py-4 w-full rounded-tr-xl xl:rounded-e-xl cursor-pointer text-slate-50 hover:text-white"
+            class="flex gap-1.5 items-center justify-end px-2 bg-emerald-500 font-google-capriola text-sm py-4 w-full rounded-tr-xl xl:rounded-e-xl cursor-pointer text-slate-50 hover:text-white"
           >
-            Bagikan THR
-            <Icon icon="mdi:donate-outline" class="text-xl" />
+            Ambil THR
+            <Icon
+              icon="mdi:donate-outline"
+              class="text-xl animate-shake-infinite"
+            />
           </button>
         </div>
       </div>

@@ -145,4 +145,75 @@
       transform: rotate(360deg);
     }
   }
+
+  @keyframes shake {
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+    20% {
+      transform: translateX(-10px);
+    }
+    40% {
+      transform: translateX(10px);
+    }
+    60% {
+      transform: translateX(-10px);
+    }
+    80% {
+      transform: translateX(10px);
+    }
+  }
+
+  .animate-shake {
+    animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  }
+
+  @keyframes doorprize-shake {
+    /* 0% sampai 40%: DIAM TOTAL (Awal) */
+    0%,
+    40% {
+      transform: translate(0, 0) rotate(0deg);
+    }
+
+    /* 41% sampai 60%: SHAKE HEBAT (Tengah) */
+    42% {
+      transform: translate(-5px, -3px) rotate(-3deg);
+    }
+    44% {
+      transform: translate(5px, 3px) rotate(3deg);
+    }
+    46% {
+      transform: translate(-5px, 3px) rotate(-3deg);
+    }
+    48% {
+      transform: translate(5px, -3px) rotate(3deg);
+    }
+    50% {
+      transform: translate(-5px, -3px) rotate(-3deg);
+    }
+    52% {
+      transform: translate(5px, 3px) rotate(3deg);
+    }
+    54% {
+      transform: translate(-5px, 3px) rotate(-3deg);
+    }
+    56% {
+      transform: translate(5px, -3px) rotate(3deg);
+    }
+    58% {
+      transform: translate(-5px, -3px) rotate(-3deg);
+    }
+
+    /* 61% sampai 100%: DIAM TOTAL (Akhir) */
+    60%,
+    100% {
+      transform: translate(0, 0) rotate(0deg);
+    }
+  }
+
+  .animate-shake-infinite {
+    /* 'infinite' membuat animasi berulang selamanya */
+    animation: doorprize-shake 2s linear infinite;
+  }
 }
